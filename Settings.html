@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #fff;
+        }
+        .settings-container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h1>Settings</h1>
+        <label for="notificationDuration">Notification Duration (ms):</label>
+        <input type="range" id="notificationDuration" min="1000" max="10000" step="1000" value="4000">
+        <span id="durationValue">4000</span> ms
+
+        <label>
+            <input type="checkbox" id="notificationSound">
+            Enable Notification Sound
+        </label>
+
+        <button id="saveSettings">Save Settings</button>
+        <a href="index.html" style="display: block; margin-top: 20px; color: #4CAF50; text-decoration: none;">Back to Home</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const durationInput = document.getElementById('notificationDuration');
+            const durationValue = document.getElementById('durationValue');
+            const soundCheckbox = document.getElementById('notificationSound');
+            const saveButton = document.getElementById('saveSettings');
+
+            // Load saved settings
+            durationInput.value = localStorage.getItem('notificationDuration') || 4000;
+            durationValue.textContent = durationInput.value;
+            soundCheckbox.checked = localStorage.getItem('notificationSound') === 'true';
+
+            durationInput.addEventListener('input', () => {
+                durationValue.textContent = durationInput.value;
+            });
+
+            saveButton.addEventListener('click', () => {
+                localStorage.setItem('notificationDuration', durationInput.value);
+                localStorage.setItem('notificationSound', soundCheckbox.checked);
+                alert('Settings saved!');
+            });
+        });
+    </script>
+</body>
+</html>
