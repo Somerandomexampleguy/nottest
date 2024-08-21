@@ -1,3 +1,4 @@
+<!-- settings.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +36,9 @@
         input[type="range"] {
             width: 100%;
         }
+        input[type="file"] {
+            margin: 10px 0;
+        }
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -51,6 +55,11 @@
         button:active {
             transform: scale(0.98);
         }
+        #imagePreview {
+            margin-top: 10px;
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +69,10 @@
         <input type="range" id="notificationDuration" min="1000" max="10000" step="1000" value="4000">
         <span id="durationValue">4000</span> ms
 
+        <label for="imageUpload">Upload Image for Notification:</label>
+        <input type="file" id="imageUpload" accept="image/*">
+        <img id="imagePreview" src="" alt="Preview" style="display: none;">
+
         <button id="saveSettings">Save Settings</button>
         <a href="index.html" style="display: block; margin-top: 20px; color: #4CAF50; text-decoration: none;">Back to Home</a>
     </div>
@@ -68,13 +81,34 @@
             const durationInput = document.getElementById('notificationDuration');
             const durationValue = document.getElementById('durationValue');
             const saveButton = document.getElementById('saveSettings');
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview');
 
             // Load saved settings
             durationInput.value = localStorage.getItem('notificationDuration') || 4000;
             durationValue.textContent = durationInput.value;
+            const savedImage = localStorage.getItem('notificationImage');
+            if (savedImage) {
+                imagePreview.src = savedImage;
+                imagePreview.style.display = 'block';
+            }
 
             durationInput.addEventListener('input', () => {
                 durationValue.textContent = durationInput.value;
+            });
+
+            imageUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageData = reader.result;
+                        imagePreview.src = imageData;
+                        imagePreview.style.display = 'block';
+                        localStorage.setItem('notificationImage', imageData);
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
 
             saveButton.addEventListener('click', () => {
