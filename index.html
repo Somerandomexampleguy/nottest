@@ -52,6 +52,16 @@
         #notifyButton:active {
             transform: scale(0.98);
         }
+        #settingsLink {
+            display: block;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        #settingsLink:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +72,7 @@
             <input type="text" id="messageInput" placeholder="Enter your message" />
         </div>
         <button id="notifyButton">Notify</button>
+        <a href="settings.html" id="settingsLink">Settings</a>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -69,11 +80,9 @@
             const nameInput = document.getElementById('nameInput');
             const messageInput = document.getElementById('messageInput');
 
-            // Check if notification permission is already granted
             if (Notification.permission === 'granted') {
                 notifyButton.style.display = 'block';
             } else if (Notification.permission === 'default') {
-                // Request notification permission
                 Notification.requestPermission().then(permission => {
                     if (permission === 'granted') {
                         notifyButton.style.display = 'block';
@@ -81,12 +90,24 @@
                 });
             }
 
-            // Add click event to the notify button
             notifyButton.addEventListener('click', () => {
                 const name = nameInput.value.trim();
                 const message = messageInput.value.trim();
+                const duration = parseInt(localStorage.getItem('notificationDuration')) || 4000;
+                const soundEnabled = localStorage.getItem('notificationSound') === 'true';
+
                 if (name && message) {
-                    new Notification(`${name} says: ${message}`);
+                    const notification = new Notification(`${name} says: ${message}`, {
+                        body: message,
+                        icon: 'notification-icon.png' // Optional: Add an icon
+                    });
+                    
+                    if (soundEnabled) {
+                        const audio = new Audio('notification-sound.mp3'); // Ensure this file exists
+                        audio.play();
+                    }
+                    
+                    setTimeout(() => notification.close(), duration);
                 } else {
                     alert('Please enter both your name and a message.');
                 }
