@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification Testing Grounds</title>
+    <title>Notification Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,14 +34,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Notification Testing Grounds</h1>
+        <h1>Notification Example</h1>
         <div>
             <input type="text" id="nameInput" placeholder="Enter your name" />
             <input type="text" id="messageInput" placeholder="Enter your message" />
         </div>
         <button id="notifyButton">Notify</button>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+        const socket = io();
+
         document.addEventListener('DOMContentLoaded', () => {
             const notifyButton = document.getElementById('notifyButton');
             const nameInput = document.getElementById('nameInput');
@@ -63,10 +66,16 @@
                 const name = nameInput.value.trim();
                 const message = messageInput.value.trim();
                 if (name && message) {
-                    new Notification(`${name} says: ${message}`);
+                    // Send notification data to the server
+                    socket.emit('sendNotification', { name, message });
                 } else {
                     alert('Please enter both your name and a message.');
                 }
+            });
+
+            // Receive and display notifications
+            socket.on('notification', (data) => {
+                new Notification(`${data.name} says: ${data.message}`);
             });
         });
     </script>
