@@ -18,6 +18,7 @@
             text-align: center;
         }
         #notifyButton {
+            display: none;
             padding: 10px 20px;
             font-size: 16px;
             color: #fff;
@@ -46,6 +47,7 @@
             const nameInput = document.getElementById('nameInput');
             const messageInput = document.getElementById('messageInput');
 
+            // Request notification permission on page load
             if (Notification.permission === 'default') {
                 Notification.requestPermission().then(permission => {
                     if (permission === 'granted') {
@@ -61,25 +63,11 @@
                 const name = nameInput.value.trim();
                 const message = messageInput.value.trim();
                 if (name && message) {
-                    localStorage.setItem('notification', JSON.stringify({ name, message }));
-                    checkForNotification();
+                    new Notification(`${name} says: ${message}`);
                 } else {
                     alert('Please enter both your name and a message.');
                 }
             });
-
-            // Polling for changes in localStorage
-            function checkForNotification() {
-                const storedNotification = localStorage.getItem('notification');
-                if (storedNotification) {
-                    const { name, message } = JSON.parse(storedNotification);
-                    new Notification(`${name} says: ${message}`);
-                    localStorage.removeItem('notification'); // Clear notification after displaying
-                }
-            }
-
-            // Set interval to check for notifications
-            setInterval(checkForNotification, 1000); // Check every second
         });
     </script>
 </body>
