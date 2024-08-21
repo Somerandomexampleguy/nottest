@@ -94,19 +94,9 @@
                 const name = nameInput.value.trim();
                 const message = messageInput.value.trim();
                 const duration = parseInt(localStorage.getItem('notificationDuration')) || 4000;
-                const soundEnabled = localStorage.getItem('notificationSound') === 'true';
 
                 if (name && message) {
-                    const notification = new Notification(`${name} says: ${message}`, {
-                        body: message,
-                        icon: 'notification-icon.png' // Optional: Add an icon
-                    });
-                    
-                    if (soundEnabled) {
-                        const audio = new Audio('notification-sound.mp3'); // Ensure this file exists
-                        audio.play();
-                    }
-                    
+                    const notification = new Notification(`${name} says: ${message}`);
                     setTimeout(() => notification.close(), duration);
                 } else {
                     alert('Please enter both your name and a message.');
