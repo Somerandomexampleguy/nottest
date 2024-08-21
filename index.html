@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,9 +95,14 @@
                 const name = nameInput.value.trim();
                 const message = messageInput.value.trim();
                 const duration = parseInt(localStorage.getItem('notificationDuration')) || 4000;
+                const imageUrl = localStorage.getItem('notificationImage');
 
                 if (name && message) {
-                    const notification = new Notification(`${name} says: ${message}`);
+                    const options = {
+                        body: message,
+                        icon: imageUrl || '/path/to/default/icon.png'
+                    };
+                    const notification = new Notification(`${name} says:`, options);
                     setTimeout(() => notification.close(), duration);
                 } else {
                     alert('Please enter both your name and a message.');
