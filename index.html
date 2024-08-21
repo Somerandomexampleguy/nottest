@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        #notifyButton {
+            display: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #notifyButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Notification Example</h1>
+        <button id="notifyButton">Notify</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notifyButton = document.getElementById('notifyButton');
+
+            // Request notification permission on page load
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        notifyButton.style.display = 'block';
+                    }
+                });
+            } else if (Notification.permission === 'granted') {
+                notifyButton.style.display = 'block';
+            }
+
+            // Add click event to the notify button
+            notifyButton.addEventListener('click', () => {
+                new Notification('Hello');
+            });
+        });
+    </script>
+</body>
+</html>
